@@ -6,7 +6,7 @@ A simple text/messaging board where ill list what i plan to/currently am working
 ## Imporant Milestones
 - [10/29] Next SE Project Report due at midnight
 
-## Vikram Singh
+## Vikram Singh [Last Visited 10/26 2:09pm]
 ### Todo/Plan list
 - [10/27] Finish database structure
 - [10/28] create a simple sql file in repo with prefilled database instructions
