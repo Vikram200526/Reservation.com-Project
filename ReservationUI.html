@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML Test</title>
+
+    <style>
+        body {
+            background-color: lightblue;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            padding-top: 50px;
+        }
+
+        h1 {
+            color: darkblue;
+        }
+
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>HTML Is Working!</h1>
+
+    <p>If you can read this, your webpage is running correctly.</p>
+
+    <button onclick="changeText()">Click Me</button>
+
+    <p id="message">Waiting for button click...</p>
+
+    <script>
+        function changeText() {
+            document.getElementById("message").innerHTML =
+                "Success! Your HTML and JavaScript work!";
+        }
+    </script>
+</body>
+</html>
