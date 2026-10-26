@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Local Restaurant Reservation</title>
+    <!-- Tailwind CSS CDN for quick styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-6">
+        <h1 class="text-2xl font-bold mb-4 text-gray-800">Find Local Restaurants</h1>
+        
+        <button onclick="fetchRestaurants()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            Load Restaurants
+        </button>
+
+        <div id="restaurant-list" class="mt-6 space-y-4">
+            <!-- Results will appear here -->
+        </div>
+    </div>
+
+    <script>
+        async function fetchRestaurants() {
+            try {
+                const response = await fetch('http://localhost:8080/api/restaurants');
+                const data = await response.json();
+                
+                const listDiv = document.getElementById('restaurant-list');
+                listDiv.innerHTML = ''; // Clear previous
+                
+                data.forEach(r => {
+                    const card = document.createElement('div');
+                    card.className = 'p-4 border rounded-lg shadow-sm bg-gray-50';
+                    card.innerHTML = `<h3 class="font-semibold text-lg">${r.restaurant_name}</h3><p class="text-gray-600">Category: ${r.category}</p>`;
+                    listDiv.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                alert('Could not connect to the Java backend.');
+            }
+        }
+    </script>
+</body>
+</html>
