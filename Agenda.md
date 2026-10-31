@@ -4,10 +4,13 @@ A simple text/messaging board where ill list what i plan to/currently am working
 - if you want you can also use this!
 
 ## Imporant Milestones
-- [10/29] Next SE Project Report due at midnight
+- [11/9] Next SE Project Report (Test Cases) due at monday, 11/9 at midnight
 
 ## Vikram Singh [Last Visited 10/26 2:09pm]
 ### Todo/Plan list
-- [10/28] create a simple sql file in repo with prefilled database instructions
+- [11/2] create sql prefilled tables 
+- [11/3] create user login backend
+- [11/4] create search/display restaurants backend
 - learn some basic html
 ### Currently working on
+- create sql prefilled tables 
