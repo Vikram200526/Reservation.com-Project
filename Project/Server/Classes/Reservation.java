@@ -1,4 +1,4 @@
-package Project.Server;
+package Project.Server.Classes;
 
 public class Reservation {
     public static void main(String[] args) {

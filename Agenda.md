@@ -6,11 +6,10 @@ A simple text/messaging board where ill list what i plan to/currently am working
 ## Imporant Milestones
 - [11/9] Next SE Project Report (Test Cases) due at monday, 11/9 at midnight
 
-## Vikram Singh [Last Visited 10/26 2:09pm]
+## Vikram Singh [Last Visited 11/2 7:15pm]
 ### Todo/Plan list
-- [11/2] create sql prefilled tables 
 - [11/3] create user login backend
 - [11/4] create search/display restaurants backend
 - learn some basic html
 ### Currently working on
-- create sql prefilled tables 
+- create user login backend
