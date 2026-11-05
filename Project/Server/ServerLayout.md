@@ -12,5 +12,3 @@ RestaurantAPI.java - handles and processes requests related to restaurants
 ReservationAPI.java - handles and processes requests related to reservations
 1. Show available reservations for a specific restaurant
 2. Select & Confirm reservation
-
-DatabaseAPI.java - handles and processes SQL/Database requests from the other java files above
