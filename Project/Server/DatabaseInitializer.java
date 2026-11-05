@@ -52,6 +52,7 @@ public class DatabaseInitializer {
         // 1. Users Table
         stmt.execute("CREATE TABLE Users (" +
                 "user_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "username TEXT NOT NULL UNIQUE, " +
                 "password TEXT NOT NULL, " +
                 "name TEXT NOT NULL, " +
                 "email TEXT NOT NULL UNIQUE, " +
@@ -110,6 +111,8 @@ public class DatabaseInitializer {
         stmt.executeUpdate("INSERT INTO Restaurants (name, description, phone, rating, address) VALUES ('Slice of Italy Pizzeria', 'Wood-fired artisanal pizzas and classic comfort pasta dishes.', '555-0404', 4.75, '321 Huguenot St, New Paltz NY');");
         stmt.executeUpdate("INSERT INTO Restaurants (name, description, phone, rating, address) VALUES ('Green Leaf Bistro', 'Plant-based grain bowls, organic salads, and fresh juices.', '555-0505', 4.40, '654 North Front St, New Paltz NY');");
 
+        // create guest account
+        stmt.executeUpdate("INSERT INTO Users (username, password, name, email, phone) VALUES ('Guest', '12345', 'Guest', 'guest@example.com', '123-456-7890');");
         System.out.println("Seed data insertion complete.");
     }
 
