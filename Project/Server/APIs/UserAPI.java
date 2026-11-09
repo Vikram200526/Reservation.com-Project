@@ -17,8 +17,8 @@ public class UserAPI {
     private static final String DB_PATH = new File("reservation_com.db").getAbsolutePath();
     private static final String URL = "jdbc:sqlite:" + DB_PATH;
 
-   public static User getUserAccount(String givenUsername, String givenPassword) {
-        String query = "SELECT * FROM Users WHERE username = '" + givenUsername + "' AND password = '" + givenPassword + "';";
+   public static User getUserAccount(String givenUsername, String givenEmail, String givenPassword) {
+        String query = "SELECT * FROM Users WHERE username = '" + givenUsername + "' AND email = '" + givenEmail + "' AND password = '" + givenPassword + "';";
 
         try (Connection conn = DriverManager.getConnection(URL);
             Statement stmt = conn.createStatement()) {

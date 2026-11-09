@@ -47,10 +47,13 @@ public class Project {
             while (!successfulLogin && !canceledLogin) {
                 System.out.println("Enter your username:");
                 String username = scanner.next();
+                System.out.println("Enter your email:");
+                String email = scanner.next();
                 System.out.println("Enter your password:");
                 String password = scanner.next();
+
                
-                User result = UserAPI.getUserAccount(username,password);
+                User result = UserAPI.getUserAccount(username,email,password);
 
                 if (result != null) {
                     successfulLogin = true;
@@ -58,7 +61,7 @@ public class Project {
 
                 } else {
                     outputSpacing();
-                    System.out.println("Invalid username or password.");
+                    System.out.println("Invalid username, email, or password.");
                     System.out.println("Type [1] to try again.");
                     System.out.println("Type [2] to cancel.");
                     int retryChoice = scanner.nextInt();
