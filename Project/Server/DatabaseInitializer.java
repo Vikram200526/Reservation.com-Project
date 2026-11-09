@@ -115,6 +115,63 @@ public class DatabaseInitializer {
         stmt.executeUpdate("INSERT INTO Restaurants (name, description, phone, rating, address) VALUES ('Thai Basil Garden', 'Traditional curries, fragrant noodle dishes, and fresh herb-infused salads.', '555-0808', 4.55, '567 Church St, New Paltz NY');");
         stmt.executeUpdate("INSERT INTO Restaurants (name, description, phone, rating, address) VALUES ('Ridgeview Steakhouse & Grill', 'Prime-cut steaks, grilled seafood, and an extensive local wine selection.', '555-0909', 4.90, '890 North Front St, New Paltz NY');");
         stmt.executeUpdate("INSERT INTO Restaurants (name, description, phone, rating, address) VALUES ('Mediterranean Olive', 'Gyros, falafel wraps, crisp Greek salads, and house-made hummus.', '555-1010', 4.50, '112 Main St, New Paltz NY');");
+        //
+        //
+        // Seed Generic Food Categories
+        stmt.executeUpdate("INSERT INTO FoodCategories (name, description) VALUES ('Pizza', 'Wood-fired, artisanal, and classic cheese/pepperoni pizzas.');");
+        stmt.executeUpdate("INSERT INTO FoodCategories (name, description) VALUES ('Burgers', 'Juicy beef, chicken, and plant-based burger patties.');");
+        stmt.executeUpdate("INSERT INTO FoodCategories (name, description) VALUES ('Sushi', 'Fresh rolls, sashimi, and hand-rolled Japanese fish dishes.');");
+        stmt.executeUpdate("INSERT INTO FoodCategories (name, description) VALUES ('Tacos', 'Street tacos, burritos, and Mexican appetizers.');");
+        stmt.executeUpdate("INSERT INTO FoodCategories (name, description) VALUES ('Salad', 'Fresh organic vegetable bowls and healthy green salads.');");
+        stmt.executeUpdate("INSERT INTO FoodCategories (name, description) VALUES ('Pasta', 'Classic Italian noodle dishes, baked ziti, and comfort bowls.');");
+        stmt.executeUpdate("INSERT INTO FoodCategories (name, description) VALUES ('BBQ', 'Slow-smoked meats, pulled pork, and ribs.');");
+        stmt.executeUpdate("INSERT INTO FoodCategories (name, description) VALUES ('Bakery', 'Freshly baked breads, pastries, and croissants.');");
+        stmt.executeUpdate("INSERT INTO FoodCategories (name, description) VALUES ('Steak', 'Prime cuts of beef, ribeyes, and grilled chops.');");
+        stmt.executeUpdate("INSERT INTO FoodCategories (name, description) VALUES ('Soup & Ramen', 'Brothy noodle bowls, pho, and warm soups.');");
+        // Link Restaurants to Multiple Generic Food Categories (restaurant_id, food_category_id)
+        // 1. The Rustic Spatula (American / Farm-to-Table) -> Burgers, Salad, Steak
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (1, 2);"); 
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (1, 5);"); 
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (1, 9);"); 
+
+        // 2. Sakura Sushi & Ramen (Japanese) -> Sushi, Soup & Ramen
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (2, 3);"); 
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (2, 10);"); 
+
+        // 3. El Toro Taqueria (Mexican) -> Tacos, Salad
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (3, 4);"); 
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (3, 5);"); 
+
+        // 4. Slice of Italy Pizzeria (Italian) -> Pizza, Pasta, Salad
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (4, 1);"); 
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (4, 6);"); 
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (4, 5);"); 
+
+        // 5. Green Leaf Bistro (Vegan / Health) -> Salad, Burgers (Veggie burgers)
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (5, 5);"); 
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (5, 2);"); 
+
+        // 6. Hudson Valley Smokehouse (BBQ) -> BBQ, Burgers, Salad
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (6, 7);"); 
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (6, 2);"); 
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (6, 5);"); 
+
+        // 7. The Artisan Baker & Café (Bakery) -> Bakery
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (7, 8);"); 
+
+        // 8. Thai Basil Garden (Thai) -> Soup & Ramen, Salad
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (8, 10);"); 
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (8, 5);"); 
+
+        // 9. Ridgeview Steakhouse & Grill (Steakhouse) -> Steak, Burgers, Salad
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (9, 9);"); 
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (9, 2);"); 
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (9, 5);"); 
+
+        // 10. Mediterranean Olive (Mediterranean) -> Salad, Burgers (Gyros/Wraps grouped loosely)
+        stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (10, 5);");
+        //
+        //
         // create guest account
         stmt.executeUpdate("INSERT INTO Users (username, password, name, email, phone) VALUES ('Guest', '12345', 'Guest', 'guest@example.com', '123-456-7890');");
         System.out.println("Seed data insertion complete.");
