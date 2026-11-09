@@ -17,6 +17,10 @@
             background-color: white;
 
             margin: auto auto;
+             display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         h1 {
@@ -38,6 +42,24 @@
 
         <form onsubmit="submitText(event)">
             <input type="text" id="userInput" placeholder="Username:">
+            <button type="submit">Enter</button>
+        </form>
+
+        <p id="output"></p>
+
+
+        <h3>Enter Email</h3>
+        <form onsubmit="submitText(event)">
+            <input type="text" id="userInput" placeholder="email:">
+            <button type="submit">Enter</button>
+        </form>
+
+        <p id="output"></p>
+
+
+        <h4>Enter Password</h4>
+        <form onsubmit="submitText(event)">
+            <input type="text" id="userInput" placeholder="Password:">
             <button type="submit">Enter</button>
         </form>
 
