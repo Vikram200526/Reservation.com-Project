@@ -8,8 +8,7 @@ A simple text/messaging board where ill list what i plan to/currently am working
 
 ## Vikram Singh [Last Visited 11/2 7:15pm]
 ### Todo/Plan list
-- [11/3] create user login backend
-- [11/4] create search/display restaurants backend
+- [11/5] create search/display restaurants backend
 - learn some basic html
 ### Currently working on
 - create user login backend

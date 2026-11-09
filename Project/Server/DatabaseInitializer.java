@@ -52,6 +52,7 @@ public class DatabaseInitializer {
         // 1. Users Table
         stmt.execute("CREATE TABLE Users (" +
                 "user_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "username TEXT NOT NULL UNIQUE, " +
                 "password TEXT NOT NULL, " +
                 "name TEXT NOT NULL, " +
                 "email TEXT NOT NULL UNIQUE, " +
@@ -109,7 +110,13 @@ public class DatabaseInitializer {
         stmt.executeUpdate("INSERT INTO Restaurants (name, description, phone, rating, address) VALUES ('El Toro Taqueria', 'Authentic street tacos, sizzling fajitas, and house-made salsas.', '555-0303', 4.60, '789 Church St, New Paltz NY');");
         stmt.executeUpdate("INSERT INTO Restaurants (name, description, phone, rating, address) VALUES ('Slice of Italy Pizzeria', 'Wood-fired artisanal pizzas and classic comfort pasta dishes.', '555-0404', 4.75, '321 Huguenot St, New Paltz NY');");
         stmt.executeUpdate("INSERT INTO Restaurants (name, description, phone, rating, address) VALUES ('Green Leaf Bistro', 'Plant-based grain bowls, organic salads, and fresh juices.', '555-0505', 4.40, '654 North Front St, New Paltz NY');");
-
+        stmt.executeUpdate("INSERT INTO Restaurants (name, description, phone, rating, address) VALUES ('Hudson Valley Smokehouse', 'Slow-smoked barbecue ribs, pulled pork, and hearty southern sides.', '555-0606', 4.65, '987 Main St, New Paltz NY');");
+        stmt.executeUpdate("INSERT INTO Restaurants (name, description, phone, rating, address) VALUES ('The Artisan Baker & Café', 'Artisan sourdough breads, gourmet pastries, and specialty espresso drinks.', '555-0707', 4.80, '234 Huguenot St, New Paltz NY');");
+        stmt.executeUpdate("INSERT INTO Restaurants (name, description, phone, rating, address) VALUES ('Thai Basil Garden', 'Traditional curries, fragrant noodle dishes, and fresh herb-infused salads.', '555-0808', 4.55, '567 Church St, New Paltz NY');");
+        stmt.executeUpdate("INSERT INTO Restaurants (name, description, phone, rating, address) VALUES ('Ridgeview Steakhouse & Grill', 'Prime-cut steaks, grilled seafood, and an extensive local wine selection.', '555-0909', 4.90, '890 North Front St, New Paltz NY');");
+        stmt.executeUpdate("INSERT INTO Restaurants (name, description, phone, rating, address) VALUES ('Mediterranean Olive', 'Gyros, falafel wraps, crisp Greek salads, and house-made hummus.', '555-1010', 4.50, '112 Main St, New Paltz NY');");
+        // create guest account
+        stmt.executeUpdate("INSERT INTO Users (username, password, name, email, phone) VALUES ('Guest', '12345', 'Guest', 'guest@example.com', '123-456-7890');");
         System.out.println("Seed data insertion complete.");
     }
 
