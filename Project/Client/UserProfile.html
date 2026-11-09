@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML Test</title>
+
+    <style>
+        body {
+            background-color: grey;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            padding-top: 50px;
+        }
+        .square {
+            width: 500px;
+            height: 600px;
+            background-color: white;
+
+            margin: auto auto;
+        }
+
+        h1 {
+            color: darkblue;
+        }
+
+        button {
+            padding: 0px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Please Log In</h1>
+
+    <div class = "square">
+        <h2>Enter Username</h2>
+
+        <form onsubmit="submitText(event)">
+            <input type="text" id="userInput" placeholder="Username:">
+            <button type="submit">Enter</button>
+        </form>
+
+        <p id="output"></p>
+    </div>
+
+    <script>
+        
+    </script>
+</body>
+</html>
