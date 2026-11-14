@@ -1,4 +1,4 @@
-package Project.Server;
+package Project.Server.TerminalUI;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

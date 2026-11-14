@@ -26,6 +26,27 @@ public class RestaurantAPI {
     private static final String DB_PATH = new File("reservation_com.db").getAbsolutePath();
     private static final String URL = "jdbc:sqlite:" + DB_PATH;
 
+    public static ArrayList<String> getFoodCategoriesForRestaurant(int restaurantId) {
+        ArrayList<String> foodCategories = new ArrayList<>();
+        String query = "SELECT fc.name FROM FoodCategories fc JOIN RestaurantCategories rc ON fc.food_category_id = rc.food_category_id WHERE rc.restaurant_id = ?;";
+
+        try (Connection conn = DriverManager.getConnection(URL);
+            PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setInt(1, restaurantId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    foodCategories.add(rs.getString("name"));
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error fetching food categories for restaurant: " + e.getMessage());
+        }
+
+        return foodCategories;
+    }
+
    public static List<Restaurant> listAllRestaurants() {
         List<Restaurant> restaurants = new ArrayList<>();
         String query = "SELECT * FROM Restaurants;";
@@ -45,7 +66,9 @@ public class RestaurantAPI {
                     double rating = rs.getDouble("rating");
                     String address = rs.getString("address");
 
-                    Restaurant restaurant = new Restaurant(id, name, description, phone, rating, address);
+
+                    ArrayList<String> foodCategories = getFoodCategoriesForRestaurant(id);
+                    Restaurant restaurant = new Restaurant(id, name, description, phone, rating, address, foodCategories);
                     restaurants.add(restaurant);
                 }
             }
@@ -58,62 +81,66 @@ public class RestaurantAPI {
     }
 
     public static List<String> GetAllFilters() {
-        return new ArrayList<>(List.of("Restaurant Name", "Above Rating", "Below Rating", "Food Category"));
+        return new ArrayList<>(List.of("None", "Above Rating", "Below Rating", "Food Category"));
     }
 
-    public static List<Restaurant> GetRestaurantsbyFilter(String FilterType, String FilterValue) {
+    public static List<Restaurant> GetRestaurantsbyFilter(String SearchName, String FilterType, String FilterValue) {
         List<Restaurant> restaurants = new ArrayList<>();
-        if (FilterType == null || FilterValue == null) {
-            return restaurants;
+        
+        // Base SQL builder with WHERE 1=1 to safely chain optional conditions
+        StringBuilder sql = new StringBuilder("SELECT DISTINCT r.* FROM Restaurants r");
+        
+        boolean isCategoryFilter = "Food Category".equals(FilterType);
+        if (isCategoryFilter) {
+            sql.append(" JOIN RestaurantCategories rc ON r.restaurant_id = rc.restaurant_id");
+            sql.append(" JOIN FoodCategories fc ON rc.food_category_id = fc.food_category_id");
         }
-
-        String sql = "";
-        boolean isNumericRating = false;
-
-        // Determine the query structure based on the filter type
-        switch (FilterType) {
-            case "Restaurant Name":
-                sql = "SELECT * FROM Restaurants WHERE name LIKE ?;";
-                break;
-                
-            case "Above Rating":
-                sql = "SELECT * FROM Restaurants WHERE rating >= ?;";
-                isNumericRating = true;
-                break;
-                
-            case "Below Rating":
-                sql = "SELECT * FROM Restaurants WHERE rating <= ?;";
-                isNumericRating = true;
-                break;
-                
-            case "Food Category":
-                // Join Restaurants -> RestaurantCategories -> FoodCategories
-                sql = "SELECT DISTINCT r.* FROM Restaurants r " +
-                    "JOIN RestaurantCategories rc ON r.restaurant_id = rc.restaurant_id " +
-                    "JOIN FoodCategories fc ON rc.food_category_id = fc.food_category_id " +
-                    "WHERE fc.name LIKE ?;";
-                break;
-                
-            default:
-                System.out.println("Unknown filter type: " + FilterType);
-                return restaurants;
+        
+        sql.append(" WHERE 1=1");
+        
+        // Check if a search name was provided
+        boolean hasSearch = (SearchName != null && !SearchName.trim().isEmpty());
+        if (hasSearch) {
+            sql.append(" AND r.name LIKE ?");
         }
+        
+        // Check if an active secondary filter is applied
+        boolean hasActiveFilter = FilterType != null && !FilterType.equals("None") && FilterValue != null && !FilterValue.trim().isEmpty();
+        if (hasActiveFilter) {
+            if (FilterType.equals("Above Rating")) {
+                sql.append(" AND r.rating >= ?");
+            } else if (FilterType.equals("Below Rating")) {
+                sql.append(" AND r.rating <= ?");
+            } else if (FilterType.equals("Food Category")) {
+                sql.append(" AND fc.name LIKE ?");
+            }
+        }
+        
+        sql.append(";");
 
         try (Connection conn = DriverManager.getConnection(URL);
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
 
-            // Bind the appropriate parameter type safely
-            if (isNumericRating) {
-                try {
-                    double ratingVal = Double.parseDouble(FilterValue.trim());
-                    pstmt.setDouble(1, ratingVal);
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid numeric rating format: " + FilterValue);
-                    return restaurants;
+            int paramIndex = 1;
+
+            // Bind SearchName parameter if present
+            if (hasSearch) {
+                pstmt.setString(paramIndex++, "%" + SearchName.trim() + "%");
+            }
+
+            // Bind FilterValue parameter if present
+            if (hasActiveFilter) {
+                if (FilterType.equals("Above Rating") || FilterType.equals("Below Rating")) {
+                    try {
+                        double ratingVal = Double.parseDouble(FilterValue.trim());
+                        pstmt.setDouble(paramIndex++, ratingVal);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid numeric rating format: " + FilterValue);
+                        return restaurants;
+                    }
+                } else if (FilterType.equals("Food Category")) {
+                    pstmt.setString(paramIndex++, "%" + FilterValue.trim() + "%");
                 }
-            } else {
-                // Use wildcards for partial matching on names and categories (e.g., "Pizza")
-                pstmt.setString(1, "%" + FilterValue.trim() + "%");
             }
 
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -125,7 +152,8 @@ public class RestaurantAPI {
                     double rating = rs.getDouble("rating");
                     String address = rs.getString("address");
 
-                    Restaurant restaurant = new Restaurant(id, name, description, phone, rating, address);
+                    ArrayList<String> foodCategories = getFoodCategoriesForRestaurant(id);
+                    Restaurant restaurant = new Restaurant(id, name, description, phone, rating, address, foodCategories);
                     restaurants.add(restaurant);
                 }
             }

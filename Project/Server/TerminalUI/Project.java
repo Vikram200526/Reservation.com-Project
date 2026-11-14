@@ -1,12 +1,15 @@
-package Project.Server;
+package Project.Server.TerminalUI;
 
+import java.io.File;
 import java.util.List;
 import java.util.Scanner;
+
 
 import Project.Server.Classes.Restaurant;
 import Project.Server.APIs.RestaurantAPI;
 import Project.Server.APIs.UserAPI;
 import Project.Server.Classes.User;
+import Project.Server.TerminalUI.Profile;
 
 
 public class Project {
@@ -29,14 +32,16 @@ public class Project {
 
         int choice = -1;
         Scanner scanner = new Scanner(System.in);
-        while (choice != 1 && choice != 2 && choice != 3) {
+        while (choice != 1 && choice != 2 && choice != 3 && choice != 4 && choice != 5) {
             System.out.println("1. Log in with existing account [1]");
             System.out.println("2. Create new account [2]");
-            System.out.println("3. Exit [3]");
+            System.out.println("3. Log in with Guest account [3]");
+            System.out.println("4. Reset local database [4]");
+            System.out.println("5. Exit [5]");
             choice = scanner.nextInt();
-            if (choice != 1 && choice != 2 && choice != 3) {
+            if (choice != 1 && choice != 2 && choice != 3 && choice != 4 && choice != 5) {
                 outputSpacing();
-                System.out.println("Invalid choice. Please enter 1, 2, or 3.");
+                System.out.println("Invalid choice. Please enter 1, 2, 3, 4, or 5.");
             }
         }
         if (choice == 1) {
@@ -44,6 +49,7 @@ public class Project {
             boolean canceledLogin = false;
             outputSpacing();
             System.out.println("You chose to log in with an existing account.");
+            User result = null;
             while (!successfulLogin && !canceledLogin) {
                 System.out.println("Enter your username:");
                 String username = scanner.next();
@@ -53,7 +59,7 @@ public class Project {
                 String password = scanner.next();
 
                
-                User result = UserAPI.getUserAccount(username,email,password);
+                result = UserAPI.getUserAccount(username,email,password);
 
                 if (result != null) {
                     successfulLogin = true;
@@ -74,7 +80,7 @@ public class Project {
             
             if (successfulLogin) {
                 System.out.println("You have successfully logged in.");
-                testRestaurantAPI();
+                Profile.main(result);
             } else if (canceledLogin) {
                 System.out.println("Login canceled.");
                 loginMain();
@@ -169,11 +175,30 @@ public class Project {
             }
             loginMain();
         } else if (choice == 3) {
+            System.out.println("Logging in with Guest account...");
+            User result = UserAPI.getUserAccount("Guest","guest@example.com","12345");
+            System.out.println("You have successfully logged in.");
+            Profile.main(result);
+        } else if (choice == 4) {
+            System.out.println("Resetting local database...");
+            File dbFile = new File("reservation_com.db");
+            if (dbFile.exists()) {
+                boolean deleted = dbFile.delete();
+                if (deleted) {
+                    System.out.println("Old reservation_com.db deleted successfully.");
+                } else {
+                    System.out.println("Warning: Could not delete reservation_com.db (file might be locked).");
+                }
+            }
+            DatabaseInitializer.initializeDatabase();
+            System.out.println("Local database reset successfully.");
+            loginMain();
+        } else if (choice == 5) {
             System.out.println("Exiting the application. Goodbye!");
             System.exit(0);
         }
     }
-    public static void main(String[] args) {
+    public static void main() {
         System.out.println("Initializing database...");
         DatabaseInitializer.initializeDatabase();
 
