@@ -1,6 +1,7 @@
 package Project.Server.TerminalUI;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -198,7 +199,7 @@ public class Project {
             System.exit(0);
         }
     }
-    public static void main() {
+    public static void main() throws SQLException {
         System.out.println("Initializing database...");
         DatabaseInitializer.initializeDatabase();
 

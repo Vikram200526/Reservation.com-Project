@@ -43,7 +43,7 @@ public class Search {
                 runSearchOptions(user);
             } else if (choice >= 1 && choice <= totalResults) {
                 Restaurant selectedRestaurant = restaurants.get(choice - 1);
-                println("Selected Restaurant: " + selectedRestaurant.getName());
+                Reserve.main(user, selectedRestaurant);
                 running = false;
             } else {
                 println("Invalid choice. Please try again.");
@@ -88,13 +88,12 @@ public class Search {
                     String filterValue = "";
                     switch (filterType) {
                         case "Above Rating":
-                            println("Enter number for Above Rating:");
                             filterValue = "-1";
                             while (filterValue.equals("-1")) {
                                 println("Enter number between 0 - 5 for Above Rating:");
-                                int rating = -1;
+                                double rating = -1;
                                 try {
-                                    rating = Integer.parseInt(System.console().readLine());
+                                    rating = Double.parseDouble(System.console().readLine());
                                 } catch (NumberFormatException e) {
                                     rating = -1;
                                 }
@@ -105,13 +104,12 @@ public class Search {
                             displaySearchResults(user, searchTerm, filterType, filterValue);
                             break;
                         case "Below Rating":
-                            println("Enter number for Below Rating:");
                             filterValue = "-1";
                             while (filterValue.equals("-1")) {
                                 println("Enter number between 0 - 5 for Below Rating:");
-                                int rating = -1;
+                                double rating = -1;
                                 try {
-                                    rating = Integer.parseInt(System.console().readLine());
+                                    rating = Double.parseDouble(System.console().readLine());
                                 } catch (NumberFormatException e) {
                                     rating = -1;
                                 }
@@ -122,10 +120,9 @@ public class Search {
                             displaySearchResults(user, searchTerm, filterType, filterValue);
                             break;
                         case "Food Category":
-                            println("Enter name for Food Category:");
                             filterValue = "-1";
                             while (filterValue.equals("-1")) {
-                                println("Enter a valid food category:");
+                                println("Enter name for Food Category:");
                                 String category = System.console().readLine();
                                 if (category != null && !category.trim().isEmpty()) {
                                     filterValue = category.trim();

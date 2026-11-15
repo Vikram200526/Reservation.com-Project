@@ -2,7 +2,13 @@ package Project.Server.TerminalUI;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.List;
+
+import Project.Server.APIs.RestaurantAPI;
+import Project.Server.Classes.Restaurant;
+
 import java.sql.SQLException;
 import java.io.File;
 
@@ -30,6 +36,9 @@ public class DatabaseInitializer {
                 conn.commit(); 
                 System.out.println("Database successfully created and seeded!");
 
+                 System.out.println("Seeding restaurant time slots...");
+                 DatabaseInitializer.seedRestaurantTimeSlots();
+
             } catch (SQLException e) {
                 System.out.println("Database initialization error: " + e.getMessage());
                 e.printStackTrace();
@@ -37,6 +46,76 @@ public class DatabaseInitializer {
 
         } else {
             System.out.println("Existing `reservation_com.db` found. Connected successfully.");
+        }
+    }
+
+    public static void seedRestaurantTimeSlots() throws SQLException {
+        // Fetch all restaurants to loop through their IDs
+        List<Restaurant> restaurants = RestaurantAPI.listAllRestaurants();
+        
+        String sql = "INSERT INTO TimeSlots (restaurant_id, date, time, table_size, table_count) VALUES (?, ?, ?, ?, ?);";
+        
+        // default seeding date 
+        String seedDate = "2026-12-01"; 
+        Connection conn = DriverManager.getConnection(URL);
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            for (Restaurant restaurant : restaurants) {
+                int restaurantId = restaurant.getRestaurantId(); 
+
+                // Loop from 9am (9) to 9pm (21)
+                for (int hour = 9; hour <= 21; hour++) {
+                    String timeString = String.format("%02d:00", hour);
+                    
+                    // Determine the repeating pattern based on the hour index
+                    // Hour 1 (9am): h%3 == 0
+                    // Hour 2 (10am): h%3 == 1
+                    // Hour 3 (11am): h%3 == 2
+                    int patternIndex = (hour - 9) % 3;
+
+                    if (patternIndex == 0) {
+                        // Pattern 1: One table for 4
+                        pstmt.setInt(1, restaurantId);
+                        pstmt.setString(2, seedDate);
+                        pstmt.setString(3, timeString);
+                        pstmt.setInt(4, 4); // table_size
+                        pstmt.setInt(5, 1); // table_count
+                        pstmt.executeUpdate();
+
+                    } else if (patternIndex == 1) {
+                        // Pattern 2: One table for 2, AND two tables for 1
+                        
+                        // Insert table size 2
+                        pstmt.setInt(1, restaurantId);
+                        pstmt.setString(2, seedDate);
+                        pstmt.setString(3, timeString);
+                        pstmt.setInt(4, 2); 
+                        pstmt.setInt(5, 1); 
+                        pstmt.executeUpdate();
+
+                        // Insert table size 1 (count: 2)
+                        pstmt.setInt(1, restaurantId);
+                        pstmt.setString(2, seedDate);
+                        pstmt.setString(3, timeString);
+                        pstmt.setInt(4, 1); 
+                        pstmt.setInt(5, 2); 
+                        pstmt.executeUpdate();
+
+                    } else if (patternIndex == 2) {
+                        // Pattern 3: Four tables for 1
+                        pstmt.setInt(1, restaurantId);
+                        pstmt.setString(2, seedDate);
+                        pstmt.setString(3, timeString);
+                        pstmt.setInt(4, 1); // table_size
+                        pstmt.setInt(5, 4); // table_count
+                        pstmt.executeUpdate();
+                    }
+                }
+            }
+            System.out.println("Time slots successfully seeded for all restaurants!");
+
+        } catch (SQLException e) {
+            System.out.println("Error seeding time slots: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -170,6 +249,7 @@ public class DatabaseInitializer {
 
         // 10. Mediterranean Olive (Mediterranean) -> Salad, Burgers (Gyros/Wraps grouped loosely)
         stmt.executeUpdate("INSERT INTO RestaurantCategories (restaurant_id, food_category_id) VALUES (10, 5);");
+        //
         //
         //
         // create guest account

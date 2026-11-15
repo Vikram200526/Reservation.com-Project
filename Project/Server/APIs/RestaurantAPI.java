@@ -7,10 +7,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.sql.Statement;
 
 import Project.Server.Classes.Restaurant;
+import Project.Server.Classes.TimeSlot;
 
 public class RestaurantAPI {
     // RestaurantAPI would provide methods that other java files could call
@@ -163,5 +166,33 @@ public class RestaurantAPI {
         }
 
         return restaurants;
+    }
+
+    public static Map<Integer, TimeSlot> getTimeSlotsForRestaurant(int restaurantId) {
+        Map<Integer, TimeSlot> timeSlotsMap = new HashMap<>();
+        String query = "SELECT * FROM TimeSlots WHERE restaurant_id = ?;";
+
+        try (Connection conn = DriverManager.getConnection(URL);
+            PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setInt(1, restaurantId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    int timeSlotId = rs.getInt("time_slot_id");
+                    String date = rs.getString("date");
+                    String time = rs.getString("time");
+                    int tableSize = rs.getInt("table_size");
+                    int tableCount = rs.getInt("table_count");
+
+                    TimeSlot slot = new TimeSlot(timeSlotId, restaurantId, date, time, tableSize, tableCount);
+                    timeSlotsMap.put(timeSlotId, slot); // Key: time_slot_id, Value: TimeSlot object
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error fetching time slots for restaurant: " + e.getMessage());
+        }
+
+        return timeSlotsMap;
     }
 }
