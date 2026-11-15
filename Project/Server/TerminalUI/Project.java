@@ -71,8 +71,11 @@ public class Project {
                     System.out.println("Invalid username, email, or password.");
                     System.out.println("Type [1] to try again.");
                     System.out.println("Type [2] to cancel.");
-                    int retryChoice = scanner.nextInt();
-                    if (retryChoice == 2) {
+                    
+                    scanner.nextLine();
+                    String retryChoice = scanner.nextLine();
+                    
+                    if (retryChoice.equals("2")) {
                         canceledLogin = true;
                     }
                     outputSpacing();
@@ -102,7 +105,8 @@ public class Project {
                 String password = scanner.next();
 
                 System.out.println("Enter full name: ");
-                String name = scanner.next();
+                scanner.nextLine();
+                String name = scanner.nextLine();
 
                 System.out.println("Enter email: ");
                 String email = scanner.next();
