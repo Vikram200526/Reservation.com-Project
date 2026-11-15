@@ -267,15 +267,23 @@ public class DatabaseInitializer {
             try (Statement stmt = conn.createStatement()) {
                 stmt.execute("PRAGMA foreign_keys = ON;");
                 
+                // 1. Drops old tables and creates fresh ones
                 executeSchemaAndSeed(stmt); 
             }
 
             conn.commit(); 
-            System.out.println("Database successfully reset and re-seeded!");
+            System.out.println("Database tables reset successfully!");
 
         } catch (SQLException e) {
             System.out.println("Database reset error: " + e.getMessage());
             e.printStackTrace();
+        }
+
+        // 2. Call it cleanly here, since it manages its own connection!
+        try {
+            seedRestaurantTimeSlots();
+        } catch (SQLException e) {
+            System.out.println("Error seeding time slots: " + e.getMessage());
         }
     }
 }
