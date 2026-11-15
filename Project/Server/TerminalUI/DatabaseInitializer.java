@@ -258,4 +258,24 @@ public class DatabaseInitializer {
     }
 
 
+    public static void resetDatabase() {
+        System.out.println("Resetting database tables and re-seeding...");
+        
+        try (Connection conn = DriverManager.getConnection(URL)) {
+            conn.setAutoCommit(false);
+
+            try (Statement stmt = conn.createStatement()) {
+                stmt.execute("PRAGMA foreign_keys = ON;");
+                
+                executeSchemaAndSeed(stmt); 
+            }
+
+            conn.commit(); 
+            System.out.println("Database successfully reset and re-seeded!");
+
+        } catch (SQLException e) {
+            System.out.println("Database reset error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }

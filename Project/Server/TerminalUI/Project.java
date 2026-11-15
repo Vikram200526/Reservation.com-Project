@@ -186,17 +186,7 @@ public class Project {
             Profile.main(result);
         } else if (choice == 4) {
             System.out.println("Resetting local database...");
-            File dbFile = new File("reservation_com.db");
-            if (dbFile.exists()) {
-                boolean deleted = dbFile.delete();
-                if (deleted) {
-                    System.out.println("Old reservation_com.db deleted successfully.");
-                } else {
-                    System.out.println("Warning: Could not delete reservation_com.db (file might be locked).");
-                }
-            }
-            DatabaseInitializer.initializeDatabase();
-            System.out.println("Local database reset successfully.");
+            DatabaseInitializer.resetDatabase();
             loginMain();
         } else if (choice == 5) {
             System.out.println("Exiting the application. Goodbye!");
