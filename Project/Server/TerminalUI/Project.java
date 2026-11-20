@@ -193,7 +193,7 @@ public class Project {
             System.exit(0);
         }
     }
-    public static void main() throws SQLException {
+    public static void main(String[] args) throws SQLException {
         System.out.println("Initializing database...");
         DatabaseInitializer.initializeDatabase();
 
